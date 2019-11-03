@@ -1,5 +1,4 @@
 import telebot
-from telebot import types
 import config # подключаем конфиг, чтобы взять с него токен бота
 
 

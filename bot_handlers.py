@@ -1,7 +1,7 @@
 from telebot.types import Message
 from random import randint, random, getrandbits, shuffle, sample
 
-from config import bot
+from bot import bot
 import texts.text as text
 import states
 import buttons

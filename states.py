@@ -1,6 +1,6 @@
 from telebot.types import Message
 from telebot import types
-from config import bot
+# from config import bot
 import config_google_spreadsheet as cgs
 import texts.text as text
 import buttons

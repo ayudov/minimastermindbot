@@ -1,0 +1,6 @@
+pyTelegramBotApi
+gunicorn
+flask
+gspread
+oauth2client
+python-dotenv

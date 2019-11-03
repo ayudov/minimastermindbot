@@ -4,4 +4,4 @@ load_dotenv()
 
 TOKEN = os.getenv('TOKEN')
 print('your TOKEN:' + TOKEN)
-APP_NAME = 'parislivebot'
+APP_NAME = 'minimastermindbot'

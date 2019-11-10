@@ -153,11 +153,6 @@ def main(message: Message):
             if message_out == 'You won!':
                 if dbm.get_user_best_score(user_id=message.from_user.id)=='NONE' or step < int(dbm.get_user_best_score(user_id=message.from_user.id)):
                     dbm.update(user_id=message.from_user.id, new_value=str(step), item='Steps')
-                    # cgs.sheet.sheet1.update_cell(cgs.get_user_row(user_id=message.from_user.id),
-                    #                              cgs.BEST_SCORE_COL,
-                    #                              step)
-            # except:
-            #     bot.send_message(message.chat.id, "Отправь только свое предположение\nК примеру: 7259")
         else:
             bot.send_message(message.chat.id, "Отправь только свою комбинацюи\nК примеру: 7259")
     else:

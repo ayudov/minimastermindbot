@@ -4,3 +4,4 @@ flask
 gspread
 oauth2client
 python-dotenv
+boto3

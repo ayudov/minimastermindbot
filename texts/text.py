@@ -18,8 +18,8 @@ CHOOSE_LANGUAGE_RUS = "Выбери язык\n"
 LANGUAGE_RUS = "Русский\n"
 UNDEFINED_LANGUAGE = "Please, choose language\n" \
                      "Пожалуйста, сначала выбери язык\n\n" \
-                     "If you prefer English language: /change_language_to_eng\n" \
-                     "Если предпочитешь русский язык: /change_language_to_rus\n"
+                     "If you prefer English language:\n/change_language_to_eng\n" \
+                     "Если предпочитешь русский язык:\n/change_language_to_rus\n"
 
 # CHOOSE_LANGUAGE = "If you prefer English language: /change_language_to_eng\n" \
 #                   "Если предпочитешь русский язык: /change_language_to_rus"
@@ -72,7 +72,7 @@ def English_ended_game():
 
 
 def English_cant_end_game():
-    return "You can't end the game because it is not started yet\n" \
+    return "You can't end the game because it is not started yet.\n" \
            "Start new game with /new_game"
 
 
@@ -112,7 +112,8 @@ def Russian_ended_game():
     return "Ты закончил игру"
 
 def Russian_cant_end_game():
-    return "Ты не можешь закончить игру\nИгра еще не начата"
+    return "Ты не можешь закончить игру, гра еще не начата.\n" \
+           "Начать новую можно /new_game"
 
 def English_help_text():
     return "<b>You can control me by sending these commands:\n\n</b>" \
@@ -153,3 +154,11 @@ def Russian_game_rules():
 
 def English_game_rules():
     return "English text of game rules"
+
+
+def Russian_user_return(user_name: str):
+    return f'С возвращением, {user_name}!'
+
+
+def English_user_return(user_name: str):
+    return f'Welcome back, {user_name}!'

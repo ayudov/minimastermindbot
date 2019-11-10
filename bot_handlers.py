@@ -12,13 +12,13 @@ import dynamo_db_manage as dbm
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message: Message):
+    bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     if dbm.exists(value=message.from_user.id):
         if dbm.get_user_language(message.from_user.id) == "NONE" and (
                 message.text != "English" and message.text != "Русский"):
             bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
         else:
             bot.send_message(message.chat.id, getattr(text, dbm.get_user_language(message.from_user.id) + "_user_return")(message.from_user.first_name,))
-        # bot.send_message(message.chat.id, "С возвращением, " + str(message.from_user.first_name) + "!")
     else:
         dbm.append_in_table(ID=message.from_user.id,
                             First_Name=message.from_user.first_name,
@@ -28,7 +28,9 @@ def send_welcome(message: Message):
                             Best_score='NONE',
                             Game_comb='NONE',
                             Steps='NONE',
-                            Game_status='NONE')
+                            Game_status='NONE',
+                            Games=0
+                            )
         bot.send_message(message.chat.id, text.HELLO_MESSAGE, parse_mode='HTML')
     # if str(message.from_user.id) in cgs.sheet.sheet1.col_values(2):
     #     bot.send_message(message.chat.id, "С возвращением, " + str(message.from_user.first_name) + "!")
@@ -50,6 +52,7 @@ def send_welcome(message: Message):
 
 @bot.message_handler(commands=['change_language_to_eng'])
 def set_ENG_language(message: Message):
+    bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     if dbm.get_user_language(message.from_user.id) == "English":
         bot.send_message(message.chat.id, "This language is already set")
     else:
@@ -59,6 +62,7 @@ def set_ENG_language(message: Message):
 
 @bot.message_handler(commands=['change_language_to_rus'])
 def set_ENG_language(message: Message):
+    bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     if dbm.get_user_language(message.from_user.id) == "Russian":
         bot.send_message(message.chat.id, "Этот язык уже установлен")
     else:
@@ -68,6 +72,7 @@ def set_ENG_language(message: Message):
 
 @bot.message_handler(commands=['help'])
 def help(message: Message):
+    bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     if dbm.get_user_language(message.from_user.id) == "NONE" and (message.text != "English" and message.text != "Русский"):
         bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
     else:
@@ -77,6 +82,7 @@ def help(message: Message):
 
 @bot.message_handler(commands=['about_author'])
 def about_author(message: Message):
+    bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     if dbm.get_user_language(message.from_user.id) == "NONE" and (message.text != "English" and message.text != "Русский"):
         bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
     else:
@@ -86,6 +92,7 @@ def about_author(message: Message):
 
 @bot.message_handler(commands=['about_game'])
 def about_game(message: Message):
+    bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     if dbm.get_user_language(message.from_user.id) == "NONE" and (message.text != "English" and message.text != "Русский"):
         bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
     else:
@@ -95,6 +102,7 @@ def about_game(message: Message):
 
 @bot.message_handler(commands=['new_game'])
 def new_game(message: Message):
+    bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     if dbm.get_user_language(message.from_user.id) == "NONE" and (message.text != "English" and message.text != "Русский"):
         bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
     else:
@@ -113,6 +121,7 @@ def new_game(message: Message):
 
 @bot.message_handler(commands=['stop_game'])
 def new_game(message: Message):
+    bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     if dbm.get_user_language(message.from_user.id) == "NONE" and (message.text != "English" and message.text != "Русский"):
         bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
     else:
@@ -131,28 +140,37 @@ def new_game(message: Message):
 
 @bot.message_handler(commands=['list'])
 def list_of_values(message: Message):
+    bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     bot.send_message(message.chat.id, str(dbm.get_user_language(message.from_user.id)))
 
 
 @bot.message_handler(content_types=['text'])
 def main(message: Message):
+    bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     if dbm.get_user_language(message.from_user.id) == "NONE" and (message.text != "English" and message.text != "Русский"):
         bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
     elif dbm.get_user_game_state(user_id=message.from_user.id) == "gaming" and \
             dbm.get_user_game_combination(user_id=message.from_user.id) != "NONE":
         if RepresentsInt(message.text):
-            # len(message.text) == 4:
-            # try:
-            # guess = int(message.text)
-            # bot.send_message(message.chat.id, "Твоя комбинация: " + str(int(message.text)))
             message_out = check_matching(message)
             bot.send_message(message.chat.id, message_out)
             step = int(dbm.get_user_game_steps(user_id=message.from_user.id)) + 1
             dbm.update(user_id=message.from_user.id, item='Steps', new_value=str(step))
             # cgs.sheet.sheet1.update_cell(cgs.get_user_row(user_id=message.from_user.id), cgs.GAME_STEPS_COL, step)
             if message_out == 'You won!':
-                if dbm.get_user_best_score(user_id=message.from_user.id)=='NONE' or step < int(dbm.get_user_best_score(user_id=message.from_user.id)):
-                    dbm.update(user_id=message.from_user.id, new_value=str(step), item='Steps')
+                games = int(dbm.get_user_games_number(user_id=message.from_user.id))
+                dbm.update(user_id=message.from_user.id, new_value=str(games+1), item='Games')
+                dbm.append_game_in_table(ID=message.from_user.id, Game_number=games + 1, Number_of_steps=dbm.get_user_game_steps(user_id=message.from_user.id))
+                dbm.update(user_id=message.from_user.id, new_value='NONE', item='Steps')
+                dbm.update(user_id=message.from_user.id, new_value='NONE', item='Game_comb')
+                dbm.update(user_id=message.from_user.id, new_value='NONE', item='Game_status')
+
+                if str(dbm.get_user_best_score(user_id=message.from_user.id))=='NONE' or step < int(dbm.get_user_best_score(user_id=message.from_user.id)):
+                    dbm.update(user_id=message.from_user.id, new_value=str(step), item='Best_score')
+                    dbm.update(user_id=message.from_user.id, item='Game_status', new_value=states.NONE)
+                    dbm.update(user_id=message.from_user.id, item='Game_comb', new_value=states.NONE)
+                    dbm.update(user_id=message.from_user.id, item='Steps', new_value=states.NONE)
+
         else:
             bot.send_message(message.chat.id, "Отправь только свою комбинацюи\nК примеру: 7259")
     else:

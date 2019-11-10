@@ -21,9 +21,8 @@ dynamodb = boto3.resource('dynamodb', region_name='eu-west-3')
 
 table = dynamodb.Table('Minimastergame_users')
 
+table_user_games = dynamodb.Table('Minimastergame_users_games')
 
-# def get_number_of_rows() -> int:
-#     return len(sheet_list)-1
 
 def get_item(user_id: int) -> dict:
     return table.get_item(Key={'ID': user_id})['Item']
@@ -40,6 +39,10 @@ def get_user_language(user_id: int) -> str:
 
 def get_user_game_combination(user_id: int) -> str:
     return get_item(user_id=user_id)['Game_comb']
+
+
+def get_user_games_number(user_id: int) -> int:
+    return get_item(user_id=user_id)['Games']
 
 
 def get_user_game_steps(user_id: int) -> int:
@@ -72,7 +75,7 @@ def exists(value: str) -> bool:
 
 
 def append_in_table(ID: int, First_Name: str, Last_Name: str, Login: str, User_language: str, Game_status: str,
-                    Game_comb: str, Steps: str, Best_score: str):
+                    Game_comb: str, Steps: str, Best_score: str, Games: int):
     response = table.put_item(
         Item={
             'ID': ID,
@@ -83,11 +86,25 @@ def append_in_table(ID: int, First_Name: str, Last_Name: str, Login: str, User_l
             'Game_status': Game_status,
             'Game_comb': Game_comb,
             'Steps': Steps,
-            'Best_score': Best_score
+            'Best_score': Best_score,
+            'Games': Games
         }
     )
     print("PutItem succeeded:")
     pprint.pprint(response)
+
+
+def append_game_in_table(ID: int, Game_number: int, Number_of_steps: int):
+    response = table_user_games.put_item(
+        Item={
+            'ID': ID,
+            'Game number': Game_number,
+            'Number of steps': Number_of_steps
+        }
+    )
+    print("PutItem succeeded:")
+    pprint.pprint(response)
+
 #
 #
 # print("Movies from 1985")

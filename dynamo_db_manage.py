@@ -74,14 +74,14 @@ def exists(value: str) -> bool:
         return False
 
 
-def append_in_table(ID: int, First_Name: str, Last_Name: str, Login: str, User_language: str, Game_status: str,
+def append_in_table(ID: int, First_Name: str, User_language: str, Game_status: str,
                     Game_comb: str, Steps: str, Best_score: str, Games: int):
     response = table.put_item(
         Item={
             'ID': ID,
             'First Name': First_Name,
-            'Last Name': Last_Name,
-            'Login': Login,
+            # 'Last Name': Last_Name,
+            # 'Login': Login,
             'User_language': User_language,
             'Game_status': Game_status,
             'Game_comb': Game_comb,

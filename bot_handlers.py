@@ -1,12 +1,9 @@
 from telebot.types import Message
-from random import randint, random, getrandbits, shuffle, sample
-import datetime
+from random import shuffle, sample
 
 from bot import bot
 import texts.text as text
 import states
-# import buttons
-import config_google_spreadsheet as cgs
 import dynamo_db_manage as dbm
 
 
@@ -22,9 +19,9 @@ def send_welcome(message: Message):
     else:
         dbm.append_in_table(ID=message.from_user.id,
                             First_Name=message.from_user.first_name,
-                            Last_Name=message.from_user.last_name,
+                            # Last_Name=message.from_user.last_name,
                             User_language='NONE',
-                            Login='@' + message.from_user.username,
+                            # Login='@' + message.from_user.username,
                             Best_score='NONE',
                             Game_comb='NONE',
                             Steps='NONE',
@@ -32,22 +29,6 @@ def send_welcome(message: Message):
                             Games=0
                             )
         bot.send_message(message.chat.id, text.HELLO_MESSAGE, parse_mode='HTML')
-    # if str(message.from_user.id) in cgs.sheet.sheet1.col_values(2):
-    #     bot.send_message(message.chat.id, "С возвращением, " + str(message.from_user.first_name) + "!")
-    # else:
-    #     row = [cgs.get_number_of_rows(cgs.sheet),
-    #            message.from_user.id,
-    #            message.from_user.first_name,
-    #            message.from_user.last_name,
-    #            "@" + message.from_user.username,
-    #            states.CHOOSE_LANGUAGE,
-    #            "NONE",
-    #            "NONE",
-    #            "NONE",
-    #            "NONE",
-    #            "NONE"]
-    #     cgs.sheet.sheet1.insert_row(row, cgs.get_number_of_rows(cgs.sheet) + 1)
-    #     bot.send_message(message.chat.id, text.HELLO_MESSAGE, parse_mode='HTML')
 
 
 @bot.message_handler(commands=['change_language_to_eng'])
@@ -87,7 +68,7 @@ def about_author(message: Message):
         bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
     else:
         message_text = getattr(text, dbm.get_user_language(message.from_user.id) + "_about_author")()
-        bot.send_message(message.chat.id, message_text)
+        bot.send_message(message.chat.id, message_text, parse_mode='HTML')
 
 
 @bot.message_handler(commands=['about_game'])
@@ -97,7 +78,7 @@ def about_game(message: Message):
         bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
     else:
         message_text = getattr(text, dbm.get_user_language(message.from_user.id) + "_about_game")()
-        bot.send_message(message.chat.id, message_text)
+        bot.send_message(message.chat.id, message_text, parse_mode='HTML')
 
 
 @bot.message_handler(commands=['new_game'])
@@ -138,11 +119,8 @@ def new_game(message: Message):
             bot.send_message(message.chat.id, 'Error')
 
 
-@bot.message_handler(commands=['list'])
-def list_of_values(message: Message):
-    bot.send_chat_action(action='typing', chat_id=message.from_user.id)
-    bot.send_message(message.chat.id, str(dbm.get_user_language(message.from_user.id)))
-
+# @bot.message_handler(commands=['list'])
+# def list_of_values(message: Message):
 
 @bot.message_handler(content_types=['text'])
 def main(message: Message):
@@ -156,29 +134,25 @@ def main(message: Message):
             bot.send_message(message.chat.id, message_out)
             step = int(dbm.get_user_game_steps(user_id=message.from_user.id)) + 1
             dbm.update(user_id=message.from_user.id, item='Steps', new_value=str(step))
-            # cgs.sheet.sheet1.update_cell(cgs.get_user_row(user_id=message.from_user.id), cgs.GAME_STEPS_COL, step)
-            if message_out == 'You won!':
+            if message_out == 'You won!' or message_out == 'Ты выиграл!':
+                bot.send_sticker(chat_id=message.chat.id, data='CAADAgADqwADGB0GD9D76vaHssGlFgQ')
+                bot.send_document(chat_id=message.chat.id, data='CgADBAAD45UAAnYZZAee5etDrJrGkxYE')
                 games = int(dbm.get_user_games_number(user_id=message.from_user.id))
                 dbm.update(user_id=message.from_user.id, new_value=str(games+1), item='Games')
                 dbm.append_game_in_table(ID=message.from_user.id, Game_number=games + 1, Number_of_steps=dbm.get_user_game_steps(user_id=message.from_user.id))
                 dbm.update(user_id=message.from_user.id, new_value='NONE', item='Steps')
                 dbm.update(user_id=message.from_user.id, new_value='NONE', item='Game_comb')
                 dbm.update(user_id=message.from_user.id, new_value='NONE', item='Game_status')
-
                 if str(dbm.get_user_best_score(user_id=message.from_user.id))=='NONE' or step < int(dbm.get_user_best_score(user_id=message.from_user.id)):
                     dbm.update(user_id=message.from_user.id, new_value=str(step), item='Best_score')
                     dbm.update(user_id=message.from_user.id, item='Game_status', new_value=states.NONE)
                     dbm.update(user_id=message.from_user.id, item='Game_comb', new_value=states.NONE)
                     dbm.update(user_id=message.from_user.id, item='Steps', new_value=states.NONE)
-
         else:
             bot.send_message(message.chat.id, "Отправь только свою комбинацюи\nК примеру: 7259")
     else:
         message_text = getattr(text, dbm.get_user_language(message.from_user.id) + "_undefined_text")()
         bot.send_message(message.chat.id, message_text)
-        # try:
-        #     getattr(states, cgs.get_user_state(message.from_user.id))(message)  # Передает state пользователя
-        # except:
 
 
 def check_matching(message: Message) -> str:
@@ -191,10 +165,10 @@ def check_matching(message: Message) -> str:
             answer.append('2')
         else: answer.append('1')
 
-    return list_matches_in_answer(matches=answer)
+    return list_matches_in_answer(matches=answer, message=message)
 
 
-def list_matches_in_answer(matches: list) ->str:
+def list_matches_in_answer(matches: list, message: Message) ->str:
     shuffle(matches)
     answer = ''
     for x in matches:
@@ -202,7 +176,7 @@ def list_matches_in_answer(matches: list) ->str:
             answer += '⚫'
         elif x == '1':
             answer += '⚪'
-    if answer == '⚫⚫⚫⚫':answer = 'You won!'
+    if answer == '⚫⚫⚫⚫':answer = getattr(text, dbm.get_user_language(message.from_user.id) + "_won")()
 
     return answer
 
@@ -221,10 +195,6 @@ def random_combination() -> str:
     for i in values:
         string += str(i)
     return string
-
-# def list_matches_in_answer(input: list)->str:
-#     ans
-#     for a in input:
 
 
 if __name__ == '__main__':

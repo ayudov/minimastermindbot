@@ -1,7 +1,7 @@
 HELLO_MESSAGE = "<b>Welcome to the MasterMIND game!\n" \
                 "Тебя приветствует игра MasterMIND!</b>\n\n" \
-                "If you prefer English language: /change_language_to_eng\n" \
-                "Если предпочитешь русский язык: /change_language_to_rus\n\n" \
+                "If you prefer English language:\n/change_language_to_eng\n" \
+                "Если предпочитешь русский язык:\n/change_language_to_rus\n\n" \
                 "<i>For more info: /help\n" \
                 "Для большей информации: /help</i>"
 CHOOSE_LANGUAGE_ENG = "Choose language\n"
@@ -56,11 +56,16 @@ def English_main_menu_about():
 
 
 def English_about_author():
-    return "English text about author"
+    return 'Game was made by @AndreyYudov.\n' \
+           'Please, write to me with any questions.\n\n' \
+           "<i>© Andrii Yudov, 2019</i>"
 
 
 def English_about_game():
-    return "English text about game"
+    return '<a href="https://en.wikipedia.org/wiki/Mastermind_(board_game)">' \
+           'Link</a> to article on Wiki of a game description.' \
+           'For game guide start a new game /new_game' \
+
 
 
 def English_change_language():
@@ -85,7 +90,9 @@ def English_new_game_while_gaming():
 
 
 def Russian_about_author():
-    return "Русский текст про автора"
+    return 'Игра была создана @AndreyYudov, по всем вопросам обращайтесь в личные сообщения.\n\n' \
+           '<i>© Андрей Юдов, 2019</i>'
+    # return "Русский текст про автора"
 
 
 def Russian_main_menu_settings():
@@ -101,7 +108,10 @@ def Russian_change_language():
 
 
 def Russian_about_game():
-    return "Русский текст про игру"
+    return '<a href="https://ru.wikipedia.org/wiki/%D0%91%D1%8B%D0%BA%D0%B8_%D0%B8_%D0%BA%D0%BE%D1%80%D0%BE%D0%B2%D1%8B">' \
+           'Ссылка</a> на статью в Википедии на описание игры.' \
+           'Для показа примера игры надо начать игру /new_game'
+    # return "Русский текст про игру"
 
 
 def Russian_new_game_while_gaming():
@@ -162,3 +172,11 @@ def Russian_user_return(user_name: str):
 
 def English_user_return(user_name: str):
     return f'Welcome back, {user_name}!'
+
+
+def English_won():
+    return "You won!"
+
+
+def Russian_won():
+    return "Ты выиграл!"

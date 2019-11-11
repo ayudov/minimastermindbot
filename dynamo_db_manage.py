@@ -3,7 +3,6 @@ import boto3
 import json
 import decimal
 import pprint
-from boto3.dynamodb.conditions import Key, Attr
 
 
 # Helper class to convert a DynamoDB item to JSON.
@@ -65,8 +64,7 @@ def update(user_id: int, item: str, new_value: str):
 
 def exists(value: str) -> bool:
     try:
-        response = table.get_item(Key={'ID': value, })
-        item = response['Item']
+        table.get_item(Key={'ID': value, })
         print('Found item')
         return True
     except Exception as e:

@@ -2,8 +2,11 @@ HELLO_MESSAGE = "<b>Welcome to the MasterMIND game!\n" \
                 "Тебя приветствует игра MasterMIND!</b>\n\n" \
                 "If you prefer English language:\n/change_language_to_eng\n" \
                 "Если предпочитешь русский язык:\n/change_language_to_rus\n\n" \
+                "Начать игру: /new_game\n" \
+                "Start a game: /new_game\n\n" \
                 "<i>For more info: /help\n" \
-                "Для большей информации: /help</i>"
+                "Для большей информации: /help</i>\n"
+
 CHOOSE_LANGUAGE_ENG = "Choose language\n"
 LANGUAGE = "English\n"
 
@@ -64,8 +67,7 @@ def English_about_author():
 def English_about_game():
     return '<a href="https://en.wikipedia.org/wiki/Mastermind_(board_game)">' \
            'Link</a> to article on Wiki of a game description.' \
-           'For game guide start a new game /new_game' \
-
+           'For game guide start a new game /new_game'
 
 
 def English_change_language():
@@ -92,7 +94,6 @@ def English_new_game_while_gaming():
 def Russian_about_author():
     return 'Игра была создана @AndreyYudov, по всем вопросам обращайтесь в личные сообщения.\n\n' \
            '<i>© Андрей Юдов, 2019</i>'
-    # return "Русский текст про автора"
 
 
 def Russian_main_menu_settings():
@@ -108,10 +109,10 @@ def Russian_change_language():
 
 
 def Russian_about_game():
-    return '<a href="https://ru.wikipedia.org/wiki/%D0%91%D1%8B%D0%BA%D0%B8_%D0%B8_%D0%BA%D0%BE%D1%80%D0%BE%D0%B2%D1%8B">' \
+    return '<a href="https://ru.wikipedia.org/wiki/%D0%91%D1%8B%D0%BA%D0%B8_%D0%B8_%D0%BA%D0%BE%D1%80%D0%BE%D0%B2%D1' \
+           '%8B">' \
            'Ссылка</a> на статью в Википедии на описание игры.' \
            'Для показа примера игры надо начать игру /new_game'
-    # return "Русский текст про игру"
 
 
 def Russian_new_game_while_gaming():
@@ -121,9 +122,11 @@ def Russian_new_game_while_gaming():
 def Russian_ended_game():
     return "Ты закончил игру"
 
+
 def Russian_cant_end_game():
     return "Ты не можешь закончить игру, гра еще не начата.\n" \
            "Начать новую можно /new_game"
+
 
 def English_help_text():
     return "<b>You can control me by sending these commands:\n\n</b>" \
@@ -136,6 +139,7 @@ def English_help_text():
            "<b>Help:</b>\n" \
            "/about_author - Send information about author\n" \
            "/about_game - Send information about game\n"
+
 
 def Russian_help_text():
     return "<b>Мною можно управлять следующими командами:\n\n</b>" \
@@ -159,7 +163,9 @@ def Russian_undefined_text():
 
 
 def Russian_game_rules():
-    return "Русский текст правил игры"
+    return '<a href="https://telegra.ph/Pravila-igry-11-10">Правила и пример игры</a>\n' \
+           'Чтобы закончить эту игру: /stop_game (результаты не сохранятся)'
+    # return "Русский текст правил игры"
 
 
 def English_game_rules():
@@ -180,3 +186,19 @@ def English_won():
 
 def Russian_won():
     return "Ты выиграл!"
+
+
+def Russian_send_your_comb():
+    return "Отправь только свою комбинацюи\nК примеру: 4261"
+
+
+def English_send_your_comb():
+    return "Send your combination\nFor example: 4261"
+
+
+def Russian_send_correct_comb():
+    return "Отправь комбинацию из 4-х неповторяющихся чисел\nК примеру: 1426"
+
+
+def English_send_correct_comb():
+    return "Send your combination of 4 non-repeating numbers\nFor example: 1426"

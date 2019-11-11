@@ -24,6 +24,7 @@ table_user_games = dynamodb.Table('Minimastergame_users_games')
 
 
 def get_item(user_id: int) -> dict:
+    pprint.pprint(table.get_item(Key={'ID': user_id}))
     return table.get_item(Key={'ID': user_id})['Item']
 
 
@@ -64,12 +65,17 @@ def update(user_id: int, item: str, new_value: str):
 
 def exists(value: str) -> bool:
     try:
-        table.get_item(Key={'ID': value, })
-        print('Found item')
+        item = table.get_item(hash_key=value)
         return True
-    except Exception as e:
-        print(e)
+    except:
         return False
+    # try:
+    #     table.get_item(Key={'ID': value})
+    #     print('Found item')
+    #     return True
+    # except Exception as e:
+    #     print(e)
+    #     return False
 
 
 def append_in_table(ID: int, First_Name: str, User_language: str, Game_status: str,

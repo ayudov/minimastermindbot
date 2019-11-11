@@ -11,13 +11,10 @@ import dynamo_db_manage as dbm
 def send_welcome(message: Message):
     bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     if dbm.exists(value=message.from_user.id):
-        if dbm.get_user_language(message.from_user.id) == "NONE" and (
-                message.text != "English" and message.text != "Русский"):
+        if dbm.get_user_language(message.from_user.id) == "NONE" and (message.text != "English" and message.text != "Русский"):
             bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
         else:
-            bot.send_message(message.chat.id,
-                             getattr(text, dbm.get_user_language(message.from_user.id) + "_user_return")(
-                                 message.from_user.first_name, ))
+            bot.send_message(message.chat.id,getattr(text, dbm.get_user_language(message.from_user.id) + "_user_return")(message.from_user.first_name, ))
     else:
         dbm.append_in_table(ID=message.from_user.id,
                             First_Name=message.from_user.first_name,
@@ -89,8 +86,7 @@ def about_game(message: Message):
 @bot.message_handler(commands=['new_game'])
 def new_game(message: Message):
     bot.send_chat_action(action='typing', chat_id=message.from_user.id)
-    if dbm.get_user_language(message.from_user.id) == "NONE" and (
-            message.text != "English" and message.text != "Русский"):
+    if dbm.get_user_language(message.from_user.id) == "NONE" and (message.text != "English" and message.text != "Русский"):
         bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
     else:
         if dbm.get_user_game_state(message.from_user.id) == states.GAMING:
@@ -192,7 +188,7 @@ def list_matches_in_answer(matches: list, message: Message) -> str:
         elif x == '1':
             answer += '⚪'
     if answer == '⚫⚫⚫⚫':
-        answer = '⚫⚫⚫⚫\n' + getattr(text, dbm.get_user_language(message.from_user.id) + "_won")()
+        answer = getattr(text, dbm.get_user_language(message.from_user.id) + "_won")()
 
     return answer
 

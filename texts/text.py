@@ -169,7 +169,7 @@ def Russian_game_rules():
 
 
 def English_game_rules():
-    return '<a href="https://telegra.ph/Pravila-igry-11-10">Rues and a game exaple</a>\n' \
+    return '<a href="https://telegra.ph/Rules-of-the-game-11-12">Rules and example of game</a>\n' \
            'To and this game: /stop_game (results will not be saved)'
     # return "English text of game rules"
 

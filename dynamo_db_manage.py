@@ -65,7 +65,7 @@ def update(user_id: int, item: str, new_value: str):
 
 def exists(value: str) -> bool:
     try:
-        item = table.get_item(hash_key=value)
+        table.get_item(hash_key=value)
         return True
     except:
         return False

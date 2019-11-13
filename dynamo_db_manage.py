@@ -3,6 +3,8 @@ import boto3
 import json
 import decimal
 import pprint
+import operator
+from boto3.dynamodb.conditions import Key
 
 
 # Helper class to convert a DynamoDB item to JSON.
@@ -23,6 +25,8 @@ table = dynamodb.Table('Minimastergame_users')
 table_user_games = dynamodb.Table('Minimastergame_users_games')
 
 
+
+
 def get_item(user_id: int) -> dict:
     pprint.pprint(table.get_item(Key={'ID': user_id}))
     return table.get_item(Key={'ID': user_id})['Item']
@@ -30,7 +34,6 @@ def get_item(user_id: int) -> dict:
 
 def get_user_game_state(user_id: int) -> str:
     return get_item(user_id=user_id)['Game_status']
-    # return str(sheet_list[get_user_row(user_id)][STATE_COL])
 
 
 def get_user_language(user_id: int) -> str:
@@ -69,13 +72,6 @@ def exists(value: str) -> bool:
         return True
     except:
         return False
-    # try:
-    #     table.get_item(Key={'ID': value})
-    #     print('Found item')
-    #     return True
-    # except Exception as e:
-    #     print(e)
-    #     return False
 
 
 def append_in_table(ID: int, First_Name: str, User_language: str, Game_status: str,
@@ -109,20 +105,26 @@ def append_game_in_table(ID: int, Game_number: int, Number_of_steps: int):
     print("PutItem succeeded:")
     pprint.pprint(response)
 
-#
-#
-# print("Movies from 1985")
-#
-# response = table.query(
-#     KeyConditionExpression=Key('year').eq(2019)
-# )
-#
-# for i in response['Items']:
-#     print(i['year'], ":", i['title'])
-#
-# def get_item_by_year(year : int):
-#     response = table.query(KeyConditionExpression=Key('year').eq(1985))
-#     answer = ''
-#     for i in response['Items']:
-#         answer += str(i['year']) + " :" + str(i['title'] + '\n')
-#     return answer
+
+def get_top_three():
+    answer = {}
+    response = table.scan()
+
+    for i in response['Items']:
+        answer[i['First Name']]=i['Best_score']
+
+    sorted_answer = sorted(answer.items(), key=operator.itemgetter(1))
+    print(answer)
+    print(sorted_answer)
+
+    tmp = 0
+    answer = ''
+    for i in sorted_answer:
+        if tmp == 3: break
+        try:
+            tmp += 1
+            answer = answer + '\n' + 'Name: ' + i[0] + ', Score: ' + i[1]
+        except:
+            break
+
+    return answer

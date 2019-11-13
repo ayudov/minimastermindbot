@@ -122,8 +122,9 @@ def new_game(message: Message):
             bot.send_message(message.chat.id, 'Error')
 
 
-# @bot.message_handler(commands=['list'])
-# def list_of_values(message: Message):
+@bot.message_handler(commands=['scores'])
+def list_of_values(message: Message):
+    bot.send_message(chat_id=message.chat.id, text='Here top three: \n' + dbm.get_top_three())
 
 @bot.message_handler(content_types=['text'])
 def main(message: Message):

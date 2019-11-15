@@ -178,7 +178,7 @@ def main(message: Message):
             bot.reply_to(message, message_text)
     else:
         message_text = getattr(text, dbm.get_user_language(message.from_user.id) + "_undefined_text")()
-        # bot.send_message(message.chat.id, message_text)
+        #bot.send_message(message.chat.id, message_text)
         bot.reply_to(message, message_text)
 
 

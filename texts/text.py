@@ -1,3 +1,5 @@
+import random
+
 HELLO_MESSAGE = "<b>Welcome to the MasterMIND game!\n" \
                 "Тебя приветствует игра MasterMIND!</b>\n\n" \
                 "If you prefer English language:\n/change_language_to_eng\n" \
@@ -136,6 +138,8 @@ def English_help_text():
            "<b>Language:</b>\n" \
            "/change_language_to_rus - Change game language to Russian\n" \
            "/change_language_to_eng - Change game language to English\n\n" \
+           "<b>Other:</b>\n" \
+           "/scores - Show top 3\n\n" \
            "<b>Help:</b>\n" \
            "/about_author - Send information about author\n" \
            "/about_game - Send information about game\n"
@@ -149,6 +153,8 @@ def Russian_help_text():
            "<b>Язык:</b>\n" \
            "/change_language_to_rus - Сменить язык игры на русский\n" \
            "/change_language_to_eng - Сменить язык игры на английский\n\n" \
+           "<b>Другое:</b>\n" \
+           "/scores - Показать топ 3\n\n" \
            "<b>Помощь:</b>\n" \
            "/about_author - Информация про автора\n" \
            "/about_game - Информация про игру\n"
@@ -204,3 +210,43 @@ def Russian_send_correct_comb():
 
 def English_send_correct_comb():
     return "Send your combination of 4 non-repeating numbers\nFor example: 1426"
+
+
+def English_get_top_three():
+    return "Here top three:"
+
+
+def Russian_get_top_three():
+    return "Топ 3:"
+
+
+def Russian_name():
+    return "Имя:"
+
+
+def English_name():
+    return "Name:"
+
+
+def Russian_score():
+    return "Счет:"
+
+
+def English_score():
+    return "Score:"
+
+
+def get_random_cat_sticker()-> str:
+    cat_stickers = ['CAADAgADjwADGB0GD0ckrhn7ST9JFgQ', 'CAADAgADlAADGB0GD2N0vIBl_YU9FgQ', 'CAADAgADlwADGB0GD925naB2NCtAFgQ',
+                    'CAADAgADqAADGB0GDxehuI_QW14IFgQ', 'CAADAgADnQADGB0GD96UPBJ75fcYFgQ', 'CAADAgADrwADGB0GD2lW7liH9bAcFgQ',
+                    'CAADAgAD3wADGB0GDzlvNc3zxUjzFgQ', 'CAADAgAD7QUAAj6IGgswPEAoF7rqGhYE', 'CAADAgADCwYAAj6IGgs4SJaIjvmrChYE',
+                    'CAADAgAD6AUAAj6IGgujEXZXOspa_BYE', 'CAADAgADQAADl_TGFEvGqiBA4tFuFgQ', 'CAADAgADEgADl_TGFDToiuVXYbgWFgQ',
+                    'CAADBAADuwMAAv4zDQZx45Fls0vnIxYE', 'CAADBAAD3gMAAv4zDQYzjmHHTWwZBBYE']
+    return random.choice(cat_stickers)
+
+
+def get_random_cat_gif()-> str:
+    cat_gifs = ['CgADBAADvp8AAsIeZAe9NgtsDnLWBRYE', 'CgADAgADiwQAAqcQUUrZ4tPLkcpfPBYE',
+                'CgADBAADDp8AApIcZAfiLwYNP1lcCRYE', 'CgADBAAD4rAAArcXZAdi4exB-q1PIRYE', 'CgADBAAD4rAAArcXZAdi4exB-q1PIRYE',
+                'CgADBAAD3qAAAtQdZAeDuFOriLJGkRYE']
+    return random.choice(cat_gifs)

@@ -2,8 +2,9 @@ from __future__ import print_function  # Python 2/3 compatibility
 import boto3
 import json
 import decimal
-import pprint
+# import pprint
 import operator
+from texts import text
 from boto3.dynamodb.conditions import Key
 
 
@@ -28,7 +29,7 @@ table_user_games = dynamodb.Table('Minimastergame_users_games')
 
 
 def get_item(user_id: int) -> dict:
-    pprint.pprint(table.get_item(Key={'ID': user_id}))
+    # pprint.pprint(table.get_item(Key={'ID': user_id}))
     return table.get_item(Key={'ID': user_id})['Item']
 
 
@@ -91,7 +92,7 @@ def append_in_table(ID: int, First_Name: str, User_language: str, Game_status: s
         }
     )
     print("PutItem succeeded:")
-    pprint.pprint(response)
+    # pprint.pprint(response)
 
 
 def append_game_in_table(ID: int, Game_number: int, Number_of_steps: int):
@@ -103,10 +104,10 @@ def append_game_in_table(ID: int, Game_number: int, Number_of_steps: int):
         }
     )
     print("PutItem succeeded:")
-    pprint.pprint(response)
+    # pprint.pprint(response)
 
 
-def get_top_three():
+def get_top_three(message):
     answer = {}
     response = table.scan()
 
@@ -114,8 +115,6 @@ def get_top_three():
         answer[i['First Name']]=i['Best_score']
 
     sorted_answer = sorted(answer.items(), key=operator.itemgetter(1))
-    print(answer)
-    print(sorted_answer)
 
     tmp = 0
     answer = ''
@@ -123,7 +122,9 @@ def get_top_three():
         if tmp == 3: break
         try:
             tmp += 1
-            answer = answer + '\n' + 'Name: ' + i[0] + ', Score: ' + i[1]
+            answer = answer + '\n' + \
+                     getattr(text, get_user_language(message.from_user.id) + "_name")()+' '+i[0]+ \
+                     ', '+ getattr(text, get_user_language(message.from_user.id) + "_score")()+' '+ i[1]
         except:
             break
 

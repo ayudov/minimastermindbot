@@ -34,20 +34,24 @@ def send_welcome(message: Message):
 def set_ENG_language(message: Message):
     bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     if dbm.get_user_language(message.from_user.id) == "English":
-        bot.send_message(message.chat.id, "This language is already set")
+        # bot.send_message(message.chat.id, "This language is already set")
+        bot.reply_to(message, "This language is already set")
     else:
         dbm.update(user_id=message.from_user.id, item='User_language', new_value='English')
-        bot.send_message(message.chat.id, getattr(text, dbm.get_user_language(message.from_user.id) + "_set")())
+        # bot.send_message(message.chat.id, getattr(text, dbm.get_user_language(message.from_user.id) + "_set")())
+        bot.reply_to(message, getattr(text, dbm.get_user_language(message.from_user.id) + "_set")())
 
 
 @bot.message_handler(commands=['change_language_to_rus'])
 def set_ENG_language(message: Message):
     bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     if dbm.get_user_language(message.from_user.id) == "Russian":
-        bot.send_message(message.chat.id, "Этот язык уже установлен")
+        # bot.send_message(message.chat.id, "Этот язык уже установлен")
+        bot.reply_to(message, "Этот язык уже установлен")
     else:
         dbm.update(user_id=message.from_user.id, item='User_language', new_value='Russian')
-        bot.send_message(message.chat.id, getattr(text, dbm.get_user_language(message.from_user.id) + "_set")())
+        # bot.send_message(message.chat.id, getattr(text, dbm.get_user_language(message.from_user.id) + "_set")())
+        bot.reply_to(message, getattr(text, dbm.get_user_language(message.from_user.id) + "_set")())
 
 
 @bot.message_handler(commands=['help'])
@@ -55,10 +59,12 @@ def help_message(message: Message):
     bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     if dbm.get_user_language(message.from_user.id) == "NONE" and (
             message.text != "English" and message.text != "Русский"):
-        bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
+        # bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
+        bot.reply_to(message, text.UNDEFINED_LANGUAGE)
     else:
         message_text = getattr(text, dbm.get_user_language(message.from_user.id) + "_help_text")()
-        bot.send_message(message.chat.id, message_text, parse_mode='HTML')
+        # bot.send_message(message.chat.id, message_text, parse_mode='HTML')
+        bot.reply_to(message, message_text, parse_mode='HTML')
 
 
 @bot.message_handler(commands=['about_author'])
@@ -66,10 +72,12 @@ def about_author(message: Message):
     bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     if dbm.get_user_language(message.from_user.id) == "NONE" and (
             message.text != "English" and message.text != "Русский"):
-        bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
+        # bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
+        bot.reply_to(message, text.UNDEFINED_LANGUAGE)
     else:
         message_text = getattr(text, dbm.get_user_language(message.from_user.id) + "_about_author")()
-        bot.send_message(message.chat.id, message_text, parse_mode='HTML')
+        # bot.send_message(message.chat.id, message_text, parse_mode='HTML')
+        bot.reply_to(message, message_text, parse_mode='HTML')
 
 
 @bot.message_handler(commands=['about_game'])
@@ -77,10 +85,12 @@ def about_game(message: Message):
     bot.send_chat_action(action='typing', chat_id=message.from_user.id)
     if dbm.get_user_language(message.from_user.id) == "NONE" and (
             message.text != "English" and message.text != "Русский"):
-        bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
+        # bot.send_message(message.chat.id, text.UNDEFINED_LANGUAGE)
+        bot.reply_to(message, text.UNDEFINED_LANGUAGE)
     else:
         message_text = getattr(text, dbm.get_user_language(message.from_user.id) + "_about_game")()
-        bot.send_message(message.chat.id, message_text, parse_mode='HTML')
+        # bot.send_message(message.chat.id, message_text, parse_mode='HTML')
+        bot.reply_to(message, message_text, parse_mode='HTML')
 
 
 @bot.message_handler(commands=['new_game'])
@@ -124,7 +134,9 @@ def new_game(message: Message):
 
 @bot.message_handler(commands=['scores'])
 def list_of_values(message: Message):
-    bot.send_message(chat_id=message.chat.id, text='Here top three: \n' + dbm.get_top_three())
+    bot.reply_to(message=message, text='<b>'+getattr(text, dbm.get_user_language(message.from_user.id) + "_get_top_three")()+'</b>\n' + dbm.get_top_three(message),
+                 parse_mode='HTML')
+
 
 @bot.message_handler(content_types=['text'])
 def main(message: Message):
@@ -136,12 +148,13 @@ def main(message: Message):
             dbm.get_user_game_combination(user_id=message.from_user.id) != "NONE":
         if RepresentsInt(message.text) and len(message.text) == 4:
             message_out = check_matching(message)
-            bot.send_message(message.chat.id, message_out)
+            # bot.send_message(message.chat.id, message_out)
+            bot.reply_to(message, message_out)
             step = int(dbm.get_user_game_steps(user_id=message.from_user.id)) + 1
             dbm.update(user_id=message.from_user.id, item='Steps', new_value=str(step))
             if message_out == 'You won!' or message_out == 'Ты выиграл!':
-                bot.send_sticker(chat_id=message.chat.id, data='CAADAgADqwADGB0GD9D76vaHssGlFgQ')
-                bot.send_document(chat_id=message.chat.id, data='CgADBAAD45UAAnYZZAee5etDrJrGkxYE')
+                bot.send_sticker(chat_id=message.chat.id, data=text.get_random_cat_sticker())
+                bot.send_document(chat_id=message.chat.id, data=text.get_random_cat_gif())
                 games = int(dbm.get_user_games_number(user_id=message.from_user.id))
                 dbm.update(user_id=message.from_user.id, new_value=str(games + 1), item='Games')
                 dbm.append_game_in_table(ID=message.from_user.id, Game_number=games + 1,
@@ -157,13 +170,16 @@ def main(message: Message):
                     dbm.update(user_id=message.from_user.id, item='Steps', new_value=states.NONE)
         elif RepresentsInt(message.text) and len(message.text) != 4:
             message_text = getattr(text, dbm.get_user_language(message.from_user.id) + "_send_correct_comb")()
-            bot.send_message(message.chat.id, message_text)
+            # bot.send_message(message.chat.id, message_text)
+            bot.reply_to(message, message_text)
         else:
             message_text = getattr(text, dbm.get_user_language(message.from_user.id) + "_send_your_comb")()
-            bot.send_message(message.chat.id, message_text)
+            # bot.send_message(message.chat.id, message_text)
+            bot.reply_to(message, message_text)
     else:
         message_text = getattr(text, dbm.get_user_language(message.from_user.id) + "_undefined_text")()
-        bot.send_message(message.chat.id, message_text)
+        # bot.send_message(message.chat.id, message_text)
+        bot.reply_to(message, message_text)
 
 
 def check_matching(message: Message) -> str:
@@ -208,6 +224,9 @@ def random_combination() -> str:
     for i in values:
         string += str(i)
     return string
+
+
+
 
 
 if __name__ == '__main__':

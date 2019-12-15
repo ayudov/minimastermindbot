@@ -2,10 +2,8 @@ from __future__ import print_function  # Python 2/3 compatibility
 import boto3
 import json
 import decimal
-# import pprint
 import operator
 from texts import text
-from boto3.dynamodb.conditions import Key
 
 
 # Helper class to convert a DynamoDB item to JSON.
@@ -104,8 +102,6 @@ def append_game_in_table(ID: int, Game_number: int, Number_of_steps: int):
         }
     )
     print("PutItem succeeded:")
-    # pprint.pprint(response)
-
 
 def get_top_three(message):
     answer = {}
